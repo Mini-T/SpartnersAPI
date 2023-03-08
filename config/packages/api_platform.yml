@@ -1,0 +1,10 @@
+# config/packages/api_platform.yaml
+api_platform:
+  resources:
+    App\Entity\User:
+      itemOperations:
+        get: ~
+        post: ~
+        patch: ~
+      collectionOperations:
+        get: ~
