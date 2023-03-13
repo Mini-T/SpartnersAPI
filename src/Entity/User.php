@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['read:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item'])]
     private ?string $email = null;
 
     #[Groups(['read:user:item', 'write:user:item'])]
@@ -51,6 +51,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['write:user:item'])]
+    #[ApiProperty(writableLink: false, security: true)]
     private ?string $password = null;
 
     #[Groups(['read:user:item', 'write:user:item'])]
