@@ -9,13 +9,13 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use Doctrine\DBAL\Types\Types;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ApiResource(
     operations: [
     new Get(),

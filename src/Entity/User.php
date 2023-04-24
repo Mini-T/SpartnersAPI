@@ -22,12 +22,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
         new Post(processor: UserProcessor::class),
         new Put(processor: UserProcessor::class),
         new Patch(processor: UserProcessor::class),
-        new Delete()
+        new Delete(),
     ],
     normalizationContext: ['groups' => ['read:user:item']],
     denormalizationContext: ['groups' => ['write:user:item']]
@@ -44,9 +42,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read:user:item', 'write:user:item'])]
     private ?string $email = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item'])]
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
