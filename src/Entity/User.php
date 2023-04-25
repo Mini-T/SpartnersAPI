@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -20,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
+        new Get(),
         new Post(processor: UserProcessor::class),
         new Put(processor: UserProcessor::class),
         new Patch(processor: UserProcessor::class),
@@ -37,7 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:chat:item'])]
     private ?string $email = null;
 
     #[Groups(['read:user:item'])]
@@ -113,9 +115,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     private ?SportsHall $sportsHall = null;
 
+    #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'users')]
+    private Collection $inChats;
+
+    #[ORM\OneToMany(mappedBy: 'admin', targetEntity: Chat::class, orphanRemoval: true)]
+    private Collection $ownedChats;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+        $this->inChats = new ArrayCollection();
+        $this->ownedChats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -385,6 +395,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSportsHall(?SportsHall $sportsHall): self
     {
         $this->sportsHall = $sportsHall;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getInChats(): Collection
+    {
+        return $this->inChats;
+    }
+
+    public function addInChat(Chat $inChat): self
+    {
+        if (!$this->inChats->contains($inChat)) {
+            $this->inChats->add($inChat);
+            $inChat->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInChat(Chat $inChat): self
+    {
+        if ($this->inChats->removeElement($inChat)) {
+            $inChat->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getOwnedChats(): Collection
+    {
+        return $this->ownedChats;
+    }
+
+    public function addOwnedChat(Chat $ownedChat): self
+    {
+        if (!$this->ownedChats->contains($ownedChat)) {
+            $this->ownedChats->add($ownedChat);
+            $ownedChat->setAdmin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOwnedChat(Chat $ownedChat): self
+    {
+        if ($this->ownedChats->removeElement($ownedChat)) {
+            // set the owning side to null (unless already changed)
+            if ($ownedChat->getAdmin() === $this) {
+                $ownedChat->setAdmin(null);
+            }
+        }
 
         return $this;
     }

@@ -35,24 +35,25 @@ class Message {
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['read:message:item', 'read:user:item', 'write:message:item'])]
+    #[Groups(['read:message:item', 'read:user:item', 'write:message:item', 'read:chat:item'])]
     #[ApiProperty(writable: true)]
     private string $content = "test";
 
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['read:message:item', 'write:message:item', 'read:user:item'])]
+    #[Groups(['read:message:item', 'write:message:item'])]
     private DateTime $datetime;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    #[ApiProperty(writable: false)]
+    #[ApiProperty(writable: true)]
     #[Groups(['read:message:item'])]
     private User $sender;
 
     #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[Groups(['read:message:item', 'write:message:item'])]
     private ?Chat $chat = null;
 
     /**

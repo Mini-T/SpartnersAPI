@@ -28,6 +28,7 @@ class AddCurrentUserSubscriber implements EventSubscriberInterface
         $this->tokenStorage=$tokenStorage;
         $this->requestStack = $requestStack;
         $this->security = $security;
+        $this->logger = $logger;
     }
 
     public static function getSubscribedEvents()
@@ -56,6 +57,6 @@ class AddCurrentUserSubscriber implements EventSubscriberInterface
         }
 
         $message->setSender($owner);
-        $this->logger->info(sprintf('Owner attached to article #%d.', $message));
+        $this->logger->info(sprintf('Owner attached to article #%d.', $message->getId()));
     }
 }

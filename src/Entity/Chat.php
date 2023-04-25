@@ -45,18 +45,20 @@ class Chat
     #[Groups(['read:chat:item','write:chat:item'])]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'chats')]
-    #[ORM\JoinColumn(nullable: false)]
+
+
     #[Groups(['read:chat:item','write:chat:item'])]
-    private ?User $admin = null;
+    #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class, orphanRemoval: true)]
+    private Collection $messages;
 
     #[Groups(['read:chat:item','write:chat:item'])]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'inChats')]
     private Collection $users;
 
     #[Groups(['read:chat:item','write:chat:item'])]
-    #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class, orphanRemoval: true)]
-    private Collection $messages;
+    #[ORM\ManyToOne(inversedBy: 'ownedChats')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $admin = null;
 
     public function __construct()
     {
@@ -93,17 +95,6 @@ class Chat
         return $this;
     }
 
-    public function getAdmin(): ?User
-    {
-        return $this->admin;
-    }
-
-    public function setAdmin(?User $admin): self
-    {
-        $this->admin = $admin;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, User>
@@ -155,6 +146,18 @@ class Chat
                 $message->setChat(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdmin(): ?User
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?User $admin): self
+    {
+        $this->admin = $admin;
 
         return $this;
     }
