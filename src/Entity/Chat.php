@@ -45,14 +45,18 @@ class Chat
 
     #[ORM\ManyToOne(inversedBy: 'chats')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $adminId = null;
+    private ?User $admin = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'inChats')]
     private Collection $users;
 
+    #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class)]
+    private Collection $messages;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,14 +88,14 @@ class Chat
         return $this;
     }
 
-    public function getAdminId(): ?User
+    public function getAdmin(): ?User
     {
-        return $this->adminId;
+        return $this->admin;
     }
 
-    public function setAdminId(?User $adminId): self
+    public function setAdmin(?User $admin): self
     {
-        $this->adminId = $adminId;
+        $this->admin = $admin;
 
         return $this;
     }
@@ -116,6 +120,36 @@ class Chat
     public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setChat($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getChat() === $this) {
+                $message->setChat(null);
+            }
+        }
 
         return $this;
     }

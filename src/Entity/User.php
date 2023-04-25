@@ -111,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['read:user:item', 'write:user:item'])]
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
-    private ?SportsHall $sportsHallId = null;
+    private ?SportsHall $sportsHall = null;
 
     public function __construct()
     {
@@ -377,14 +377,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSportsHallId(): ?SportsHall
+    public function getSportsHall(): ?SportsHall
     {
-        return $this->sportsHallId;
+        return $this->sportsHall;
     }
 
-    public function setSportsHallId(?SportsHall $sportsHallId): self
+    public function setSportsHall(?SportsHall $sportsHall): self
     {
-        $this->sportsHallId = $sportsHallId;
+        $this->sportsHall = $sportsHall;
 
         return $this;
     }

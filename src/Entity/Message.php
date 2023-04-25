@@ -50,6 +50,9 @@ class Message {
     #[Groups(['read:message:item', 'write:message:item'])]
     private User $sender;
 
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    private ?Chat $chat = null;
+
     /**
      * @return int|null
      */
@@ -106,6 +109,18 @@ class Message {
     public function setSender(User $sender): self
     {
         $this->sender = $sender;
+
+        return $this;
+    }
+
+    public function getChat(): ?Chat
+    {
+        return $this->chat;
+    }
+
+    public function setChat(?Chat $chat): self
+    {
+        $this->chat = $chat;
 
         return $this;
     }

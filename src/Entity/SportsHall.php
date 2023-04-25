@@ -202,7 +202,7 @@ class SportsHall {
     {
         if (!$this->subscribers->contains($user)) {
             $this->subscribers->add($user);
-            $user->setSportsHallId($this);
+            $user->setSportsHall($this);
         }
 
         return $this;
@@ -212,8 +212,8 @@ class SportsHall {
     {
         if ($this->subscribers->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($user->getSportsHallId() === $this) {
-                $user->setSportsHallId(null);
+            if ($user->getSportsHall() === $this) {
+                $user->setSportsHall(null);
             }
         }
 
