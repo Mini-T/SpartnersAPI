@@ -50,7 +50,7 @@ class Chat
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'inChats')]
     private Collection $users;
 
-    #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class)]
+    #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
     public function __construct()
