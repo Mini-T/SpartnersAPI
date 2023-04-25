@@ -34,22 +34,27 @@ class Chat
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:chat:item' , 'read:message:item', 'read:user:item'])]
     private ?int $id = null;
 
-    #[Groups(['read:message:item', 'read:user:item'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read:chat:item','write:chat:item'])]
     private ?\DateTimeInterface $dateCreated = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read:chat:item','write:chat:item'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'chats')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read:chat:item','write:chat:item'])]
     private ?User $admin = null;
 
+    #[Groups(['read:chat:item','write:chat:item'])]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'inChats')]
     private Collection $users;
 
+    #[Groups(['read:chat:item','write:chat:item'])]
     #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 

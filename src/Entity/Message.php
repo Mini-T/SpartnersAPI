@@ -28,7 +28,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['read:message:item']],
     denormalizationContext: ['groups' => ['write:message:item']]
 )]
-#[ORM\Table(name: 'message')]
 class Message {
     #[ApiProperty(identifier: true)]
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
@@ -36,8 +35,9 @@ class Message {
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['read:message:item', 'read:user:item'])]
-    private string $content = '';
+    #[Groups(['read:message:item', 'read:user:item', 'write:message:item'])]
+    #[ApiProperty(writable: true)]
+    private string $content = "test";
 
 
     #[ORM\Column]
@@ -47,9 +47,11 @@ class Message {
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read:message:item', 'write:message:item'])]
+    #[ApiProperty(writable: false)]
+    #[Groups(['read:message:item'])]
     private User $sender;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'messages')]
     private ?Chat $chat = null;
 

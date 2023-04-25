@@ -34,23 +34,23 @@ class SportsHall {
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:item'])]
+    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public string $name;
 
     #[ORM\Column]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:item'])]
+    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public ?float $latitude;
 
     #[ORM\Column]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:item'])]
+    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public ?float $longitude;
 
     #[ORM\Column]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:item'])]
+    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public ?string $image;
 
     #[ORM\Column]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:item'])]
+    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public string $city;
 
     #[ORM\OneToMany(mappedBy: 'sportsHallId', targetEntity: User::class)]
