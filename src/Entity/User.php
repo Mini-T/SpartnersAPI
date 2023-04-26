@@ -107,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item'])]
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
     private ?Collection $messages;
 

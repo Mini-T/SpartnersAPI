@@ -16,35 +16,32 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
-class AddCurrentUserSubscriber implements EventSubscriberInterface
+class AddCurrentUserToMessageSubscriber implements EventSubscriberInterface
 {
 
-    private $tokenStorage;
     private $requestStack;
     private $security;
-    private $logger;
 
-    public function __construct(TokenStorageInterface $tokenStorage, RequestStack $requestStack, Security $security, LoggerInterface $logger){
-        $this->tokenStorage=$tokenStorage;
+    public function __construct(RequestStack $requestStack, Security $security){
         $this->requestStack = $requestStack;
         $this->security = $security;
-        $this->logger = $logger;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['attachUser', EventPriorities::PRE_WRITE]
+            KernelEvents::VIEW => ['autoConfig', EventPriorities::PRE_WRITE]
         ];
     }
 
-    public function attachUser(ViewEvent $event): void
+    public function autoConfig(ViewEvent $event): void
     {
         $request = $this->requestStack->getCurrentRequest();
         if (!$request->isMethod('POST')) {
             return;
         }
 
+        $date = new \DateTime();
         $message = $event->getControllerResult();
         if (!$message instanceof Message || !$message ->getContent() || !$event->isMainRequest()) {
             return;
@@ -55,8 +52,7 @@ class AddCurrentUserSubscriber implements EventSubscriberInterface
         if (!$owner instanceof User) {
             return;
         }
-
+        $message->setDatetime($date);
         $message->setSender($owner);
-        $this->logger->info(sprintf('Owner attached to article #%d.', $message->getId()));
     }
 }

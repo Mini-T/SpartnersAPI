@@ -18,8 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ApiResource(
     operations: [
-    new Get(),
-    new GetCollection(),
     new Post(),
     new Put(),
     new Patch(),
@@ -39,10 +37,8 @@ class Message {
     #[ApiProperty(writable: true)]
     private string $content = "test";
 
-
     #[ORM\Column]
-    #[Assert\NotBlank]
-    #[Groups(['read:message:item', 'write:message:item'])]
+    #[Groups(['read:message:item'])]
     private DateTime $datetime;
 
     #[ORM\ManyToOne(inversedBy: 'messages')]
