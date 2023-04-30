@@ -54,7 +54,8 @@ class SportsHall {
     public string $city;
 
     #[ORM\OneToMany(mappedBy: 'sportsHallId', targetEntity: User::class)]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
+
+    #[Groups(['read:sportshall:item'])]
     private Collection $subscribers;
 
     public function __construct()

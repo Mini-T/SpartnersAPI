@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
@@ -74,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['read:user:item', 'write:user:item'])]
     #[ORM\Column]
-    private ?int $age = null;
+    private string $birthDate;
 
     #[Groups(['read:user:item', 'write:user:item'])]
     #[ORM\Column(length: 255)]
@@ -97,14 +98,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $premium = false;
 
     #[Groups(['read:user:item', 'write:user:item'])]
-    #[ORM\Column]
-    private bool $registeredToAGym = false;
-
-    #[Groups(['read:user:item', 'write:user:item'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item'])]
+    #[ApiProperty(writable: false)]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
@@ -250,14 +248,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAge(): ?int
+    public function getBirthdate(): string
     {
-        return $this->age;
+        return $this->birthDate;
     }
 
-    public function setAge(int $age): self
+    public function setBirthDate(string $birthDate): self
     {
-        $this->age = $age;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
@@ -318,18 +316,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPremium(bool $premium): self
     {
         $this->premium = $premium;
-
-        return $this;
-    }
-
-    public function isRegisteredToAGym(): ?bool
-    {
-        return $this->registeredToAGym;
-    }
-
-    public function setRegisteredToAGym(bool $registeredToAGym): self
-    {
-        $this->registeredToAGym = $registeredToAGym;
 
         return $this;
     }
