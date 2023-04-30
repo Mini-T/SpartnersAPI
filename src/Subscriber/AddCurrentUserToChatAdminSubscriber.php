@@ -40,7 +40,8 @@ class AddCurrentUserToChatAdminSubscriber implements EventSubscriberInterface
         $chat = $event->getControllerResult();
         $owner = $this->security->getUser();
         $chat->addUser($owner);
-
+        $users = $chat->getUsers();
+        $names = array_map(fn(User $user): string => $user->get ,$users)
         if (!$chat instanceof Chat || !$chat->getName() || !$event->isMainRequest()) {
             return;
         }
@@ -53,4 +54,6 @@ class AddCurrentUserToChatAdminSubscriber implements EventSubscriberInterface
         $chat->setAdmin($owner);
         $chat->setDateCreated($date);
     }
+
+    public function getName()
 }

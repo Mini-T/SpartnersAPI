@@ -42,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read:user:item', 'write:user:item', 'read:chat:item'])]
     private ?string $email = null;
 
+
     #[Groups(['read:user:item'])]
     #[ORM\Column]
     #[ApiProperty(writable: false)]
