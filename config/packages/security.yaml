@@ -42,7 +42,7 @@ security:
          - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
          - { path: ^/api/users, roles: PUBLIC_ACCESS}
          - { path: ^/api/chats, roles: ROLE_USER}
-         - { path: ^/api/sports_halls, roles: ROLE_USER}
+         - { path: ^/api/sports_halls, roles: PUBLIC_ACCESS}
          - { path: ^/api/messages, roles: ROLE_USER}
 
 when@test:

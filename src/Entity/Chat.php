@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -45,11 +46,13 @@ class Chat
     #[Groups(['read:chat:item','write:chat:item'])]
     private ?string $name = null;
 
-    #[Groups(['read:chat:item','write:chat:item'])]
+    #[Groups(['read:chat:item'])]
+    #[ApiProperty(writable: false)]
     #[ORM\OneToMany(mappedBy: 'chat', targetEntity: Message::class, orphanRemoval: true)]
     private Collection $messages;
 
-    #[Groups(['read:chat:item','write:chat:item'])]
+    #[Groups(['read:chat:item'])]
+    #[ApiProperty(writable: false)]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'inChats')]
     private Collection $users;
 

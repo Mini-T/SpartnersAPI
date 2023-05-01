@@ -53,8 +53,7 @@ class SportsHall {
     #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public string $city;
 
-    #[ORM\OneToMany(mappedBy: 'sportsHallId', targetEntity: User::class)]
-
+    #[ORM\OneToMany(mappedBy: 'sportsHall', targetEntity: User::class)]
     #[Groups(['read:sportshall:item'])]
     private Collection $subscribers;
 
@@ -197,27 +196,5 @@ class SportsHall {
     public function getSubscribers(): Collection
     {
         return $this->subscribers;
-    }
-
-    public function addUser(User $user): self
-    {
-        if (!$this->subscribers->contains($user)) {
-            $this->subscribers->add($user);
-            $user->setSportsHall($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->subscribers->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getSportsHall() === $this) {
-                $user->setSportsHall(null);
-            }
-        }
-
-        return $this;
     }
 }

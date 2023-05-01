@@ -40,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['read:user:item', 'write:user:item', 'read:chat:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:chat:item', 'read:sportshall:item'])]
     private ?string $email = null;
 
 
@@ -57,35 +57,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ApiProperty(writableLink: false, security: true)]
     private ?string $password = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255)]
     private ?string $sex = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column]
     private string $birthDate;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255)]
     private ?string $level = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255)]
     private ?string $objective = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
@@ -97,16 +97,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $premium = false;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'read:sportshall:item'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
-    #[Groups(['read:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ApiProperty(writable: false)]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[Groups(['read:user:item'])]
+    #[Groups(['read:user:item', ])]
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
     private ?Collection $messages;
 
