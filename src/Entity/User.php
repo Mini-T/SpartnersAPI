@@ -22,11 +22,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
         new Post(processor: UserProcessor::class),
-        new Put(processor: UserProcessor::class),
-        new Patch(processor: UserProcessor::class),
-        new Delete(),
     ],
     normalizationContext: ['groups' => ['read:user:item']],
     denormalizationContext: ['groups' => ['write:user:item']]
@@ -197,7 +193,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getFirstname(): ?string
