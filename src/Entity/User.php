@@ -11,18 +11,24 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use App\State\UserProcessor;
+use App\Validators\Constraint\Birthdate;
+use App\Validators\Constraint\Level;
+use App\Validators\Constraint\Name;
+use App\Validators\Constraint\Sex;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
-        new Post(processor: UserProcessor::class),
+        new Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409], processor: UserProcessor::class),
     ],
     normalizationContext: ['groups' => ['read:user:item']],
     denormalizationContext: ['groups' => ['write:user:item']]
@@ -36,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Email]
     #[Groups(['read:user:item', 'write:user:item', 'read:chat:item', 'read:sportshall:item'])]
     private ?string $email = null;
 
@@ -54,26 +61,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Name]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Name]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Sex]
     #[ORM\Column(length: 255)]
     private ?string $sex = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Name]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Birthdate]
     #[ORM\Column]
     private string $birthDate;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Level]
     #[ORM\Column(length: 255)]
     private ?string $level = null;
 
@@ -95,6 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['read:user:item', 'read:sportshall:item'])]
     #[ORM\Column(nullable: true)]
+    #[ApiProperty(writable: false)]
     private ?float $latitude = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]

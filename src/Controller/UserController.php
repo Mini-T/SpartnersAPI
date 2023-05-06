@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\DTO\UserDTO;
 use App\Entity\User;
@@ -20,7 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[ApiResource(
     operations: [
-        new Get()
+        new Get(),
+        new Patch()
     ],
 )]
 #[Get(security: "is_granted('ROLE_USER')")]
