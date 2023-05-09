@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\UserController;
 use App\Repository\UserRepository;
 use App\State\UserProcessor;
 use App\Validators\Constraint\Birthdate;
@@ -29,7 +30,7 @@ use Symfony\Component\Validator\Constraints\Email;
 #[ApiResource(
     operations: [
         new Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409], processor: UserProcessor::class),
-    ],
+        ],
     normalizationContext: ['groups' => ['read:user:item']],
     denormalizationContext: ['groups' => ['write:user:item']]
 )]

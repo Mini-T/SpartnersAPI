@@ -1,5 +1,4 @@
 <?php
-// api/src/OpenApi/JwtDecorator.php
 
 declare(strict_types=1);
 
@@ -10,7 +9,7 @@ use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model;
 use ApiPlatform\OpenApi\OpenApi;
 
-final class JwtDecorator implements OpenApiFactoryInterface
+final class RefreshDecorator implements OpenApiFactoryInterface
 {
     public function __construct(
         private OpenApiFactoryInterface $decorated
@@ -24,10 +23,6 @@ final class JwtDecorator implements OpenApiFactoryInterface
         $schemas['Token'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
-                'token' => [
-                    'type' => 'string',
-                    'readOnly' => true,
-                ],
                 'refreshToken' => [
                     'type' => 'string',
                     'readOnly' => true
@@ -37,14 +32,10 @@ final class JwtDecorator implements OpenApiFactoryInterface
         $schemas['Credentials'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
-                'email' => [
+                'refreshToken' => [
                     'type' => 'string',
-                    'example' => 'johndoe@example.com',
-                ],
-                'password' => [
-                    'type' => 'string',
-                    'example' => 'apassword',
-                ],
+                    'example'=> '7315c3f66c6ba7c4bc32297a07c8cd14153f1e4693e24d4906096179afe0bbedd272e312e4b8b94ab346238063fcd90d6d178be3396503da7bd93b0f4574f180'
+                ]
             ],
         ]);
 
@@ -62,7 +53,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 tags: ['Token'],
                 responses: [
                     '200' => [
-                        'description' => 'Get JWT token',
+                        'description' => 'Refresh JWT Token',
                         'content' => [
                             'application/json' => [
                                 'schema' => [
@@ -72,9 +63,9 @@ final class JwtDecorator implements OpenApiFactoryInterface
                         ],
                     ],
                 ],
-                summary: 'Get JWT token to login.',
+                summary: 'Refresh Jwt token to login.',
                 requestBody: new Model\RequestBody(
-                    description: 'Generate new JWT Token',
+                    description: 'Generate new JWT Token from Refresh token',
                     content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -86,7 +77,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 security: [],
             ),
         );
-        $openApi->getPaths()->addPath('/api/login', $pathItem);
+        $openApi->getPaths()->addPath('/api/token/refresh', $pathItem);
 
         return $openApi;
     }

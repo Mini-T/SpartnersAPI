@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 class Sex extends Constraint {
     public $message = "la chaine '{{ string }}' n'est pas un sexe valide";
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return SexValidator::class;
     }

@@ -12,7 +12,7 @@ class Name extends Constraint
 {
     public $message = "le nom '{{ string }}' contient des caractères invalides.";
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return NameValidator::class;
     }

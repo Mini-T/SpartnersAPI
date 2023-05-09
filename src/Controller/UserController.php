@@ -39,11 +39,11 @@ class UserController extends AbstractController
     #[Route('/api/me', name: 'app_me', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse {
         $userObj = $this->security->getUser();
-        $userDto = new UserDTO($userObj->getFirstname(), $userObj->getLastname(), $userObj->getEmail(), $userObj->getSex(), $userObj->getCity(), $userObj->getLevel() ,$userObj->getObjective() ,$userObj->getDescription());
+        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getLevel() ,$userObj->getObjective() ,$userObj->getDescription());
         return $this->json($userDto);
     }
 
-    #[Route('/api/me', name: 'app_changeme', methods: ['PATCH'])]
+    #[Route('/api/changeUserInformation', name: 'app_changeme', methods: ['PATCH'])]
     public function patchCurrentUser(Request $request)
     {
         $user = $this->security->getUser();
