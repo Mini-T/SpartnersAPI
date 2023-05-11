@@ -46,7 +46,7 @@ class RefreshTokenRepository extends ServiceEntityRepository  implements Refresh
     public function findByEmail($value): array
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.email = :val')
+            ->andWhere('r.username = :val')
             ->setParameter('val', $value)
             ->orderBy('r.id', 'ASC')
             ->getQuery()

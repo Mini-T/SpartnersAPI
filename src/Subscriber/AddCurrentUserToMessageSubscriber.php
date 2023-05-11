@@ -41,12 +41,11 @@ class AddCurrentUserToMessageSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $date = new \DateTime();
         $message = $event->getControllerResult();
         if (!$message instanceof Message || !$message ->getContent() || !$event->isMainRequest()) {
             return;
         }
-
+        $date = new \DateTime();
         $owner = $this->security->getUser();
 
         if (!$owner instanceof User) {
