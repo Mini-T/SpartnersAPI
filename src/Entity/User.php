@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -30,8 +31,9 @@ use Symfony\Component\Validator\Constraints\Email;
 #[ApiResource(
     operations: [
         new Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409], processor: UserProcessor::class),
+        new GetCollection()
         ],
-    normalizationContext: ['groups' => ['read:user:item']],
+    normalizationContext: ['groups' => ['read:user:item', 'read:user:collection']],
     denormalizationContext: ['groups' => ['write:user:item']]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -61,17 +63,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ApiProperty(writableLink: false, security: true)]
     private ?string $password = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
     #[Name]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
     #[Name]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
     #[Sex]
     #[ORM\Column(length: 255)]
     private ?string $sex = null;
@@ -86,7 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $birthDate;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
     #[Level]
     #[ORM\Column(length: 255)]
     private ?string $level = null;
@@ -101,27 +103,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['read:user:item', 'write:user:item'])]
     #[ORM\Column]
-    private bool $allowLocation = false;
-
-    #[Groups(['read:user:item', 'write:user:item'])]
-    #[ORM\Column]
     private bool $premium = false;
 
-    #[Groups(['read:user:item', 'read:sportshall:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
     #[ORM\Column(nullable: true)]
-    #[ApiProperty(writable: false)]
     private ?float $latitude = null;
 
     #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
-    #[ApiProperty(writable: false)]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[Groups(['read:user:item', ])]
+    #[Groups(['read:user:item'])]
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
     private ?Collection $messages;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups(['read:user:item', 'write:user:item', 'read:user:collection'])]
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     private ?SportsHall $sportsHall = null;
 

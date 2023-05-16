@@ -11,9 +11,9 @@ class UserDTO
     public string $city;
     public string $level;
     public string $objective;
-    public string $description;
+    public ?string $description;
 
-    public function __construct(string $firstname, string $lastname, string $email, string $sex, string $city, string $description, string $level, string $objective)
+    public function __construct(string $firstname, string $lastname, string $email, string $sex, string $city, ?string $description, string $level, string $objective)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
