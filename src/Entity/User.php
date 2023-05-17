@@ -28,14 +28,10 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(
-    operations: [
-        new Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409], processor: UserProcessor::class),
-        new GetCollection()
-        ],
-    normalizationContext: ['groups' => ['read:user:item', 'read:user:collection']],
-    denormalizationContext: ['groups' => ['write:user:item']]
-)]
+#[ApiResource]
+#[Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409], processor: UserProcessor::class, denormalizationContext:  ['groups' => ['write:user:item']])]
+#[GetCollection(normalizationContext: ['groups' => ['read:user:collection']])]
+#[Get(normalizationContext: ['groups' => ['read:user:item']])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -46,11 +42,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Email]
-    #[Groups(['read:user:item', 'write:user:item', 'read:chat:item', 'read:sportshall:item'])]
+    #[Groups(['write:user:item', 'read:chat:item', 'read:user:collection'])]
     private ?string $email = null;
 
 
-    #[Groups(['read:user:item'])]
     #[ORM\Column]
     #[ApiProperty(writable: false)]
     private array $roles = ['ROLE_USER'];
@@ -63,61 +58,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ApiProperty(writableLink: false, security: true)]
     private ?string $password = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection'])]
     #[Name]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection'])]
     #[Name]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
+    #[Groups([ 'write:user:item', 'read:user:collection'])]
     #[Sex]
     #[ORM\Column(length: 255)]
     private ?string $sex = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups([ 'write:user:item'])]
     #[Name]
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups([ 'write:user:item'])]
     #[Birthdate]
     #[ORM\Column]
     private string $birthDate;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
+    #[Groups([ 'write:user:item', 'read:user:collection'])]
     #[Level]
     #[ORM\Column(length: 255)]
     private ?string $level = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups([ 'write:user:item'])]
     #[ORM\Column(length: 255)]
     private ?string $objective = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups([ 'write:user:item'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[Groups(['read:user:item', 'write:user:item'])]
+    #[Groups([ 'write:user:item'])]
     #[ORM\Column]
     private bool $premium = false;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups(['write:user:item', 'read:user:collection'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:sportshall:item'])]
+    #[Groups(['write:user:item', 'read:user:collection'])]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
-    #[Groups(['read:user:item'])]
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
     private ?Collection $messages;
 
-    #[Groups(['read:user:item', 'write:user:item', 'read:user:collection'])]
+    #[Groups([ 'write:user:item', 'read:user:collection'])]
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     private ?SportsHall $sportsHall = null;
 
@@ -299,18 +293,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function isAllowLocation(): ?bool
-    {
-        return $this->allowLocation;
-    }
-
-    public function setAllowLocation(bool $allowLocation): self
-    {
-        $this->allowLocation = $allowLocation;
 
         return $this;
     }

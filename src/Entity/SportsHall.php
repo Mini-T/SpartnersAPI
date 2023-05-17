@@ -47,14 +47,9 @@ class SportsHall {
 
     #[ORM\Column]
     #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
-    public ?string $image;
-
-    #[ORM\Column]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public string $city;
 
     #[ORM\OneToMany(mappedBy: 'sportsHall', targetEntity: User::class)]
-    #[Groups(['read:sportshall:item'])]
     private Collection $subscribers;
 
     public function __construct()
@@ -121,22 +116,6 @@ class SportsHall {
     public function setLongitude(?float $longitude): void
     {
         $this->longitude = $longitude;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string|null $image
-     */
-    public function setImage(?string $image): void
-    {
-        $this->image = $image;
     }
 
     /**
