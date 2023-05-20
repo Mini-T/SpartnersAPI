@@ -34,7 +34,7 @@ class SportsHall {
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:item'])]
+    #[Groups(['read:sportshall:item', 'write:sportshall:item', 'read:user:collection'])]
     public string $name;
 
     #[ORM\Column]

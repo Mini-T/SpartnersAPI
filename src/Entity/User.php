@@ -92,11 +92,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $objective = null;
 
-    #[Groups([ 'write:user:item'])]
+    #[Groups(['write:user:item', 'read:user:collection'])]
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $description = null;
+    private ?string $description = '';
 
-    #[Groups([ 'write:user:item'])]
+    #[Groups(['write:user:item'])]
     #[ORM\Column]
     private bool $premium = false;
 
