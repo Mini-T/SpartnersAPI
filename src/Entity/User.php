@@ -16,6 +16,7 @@ use App\State\UserProcessor;
 use App\Validators\Constraint\Birthdate;
 use App\Validators\Constraint\Level;
 use App\Validators\Constraint\Name;
+use App\Validators\Constraint\Objective;
 use App\Validators\Constraint\Sex;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -89,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $level = null;
 
     #[Groups([ 'write:user:item'])]
+    #[Objective]
     #[ORM\Column(length: 255)]
     private ?string $objective = null;
 
