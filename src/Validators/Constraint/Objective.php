@@ -1,6 +1,7 @@
 <?php
 namespace App\Validators\Constraint;
 
+use App\Validators\ObjectiveValidator;
 use App\Validators\SexValidator;
 use Attribute;
 use Symfony\Component\Validator\Constraint;
@@ -11,6 +12,6 @@ class Objective extends Constraint {
 
     public function validatedBy(): string
     {
-        return SexValidator::class;
+        return ObjectiveValidator::class;
     }
 }
