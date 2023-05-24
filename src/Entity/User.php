@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource]
-#[Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409], processor: UserProcessor::class, denormalizationContext:  ['groups' => ['write:user:item']])]
+#[Post(exceptionToStatus: [UniqueConstraintViolationException::class => 409],  processor: UserProcessor::class, denormalizationContext:  ['groups' => ['write:user:item']],normalizationContext: ['groups' => ['read:user:item']])]
 #[GetCollection(normalizationContext: ['groups' => ['read:user:collection']])]
 #[Get(normalizationContext: ['groups' => ['read:user:item']])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
