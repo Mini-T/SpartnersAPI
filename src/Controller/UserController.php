@@ -39,7 +39,7 @@ class UserController extends AbstractController
     #[Route('/api/me', name: 'app_me', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse {
         $userObj = $this->security->getUser();
-        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective() ,);
+        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective());
         return $this->json($userDto);
     }
 
