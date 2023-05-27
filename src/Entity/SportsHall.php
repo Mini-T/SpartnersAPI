@@ -1,5 +1,6 @@
 <?php
 namespace App\Entity;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -19,10 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
     new Get(),
     new GetCollection(),
-    new Post(),
-    new Put(),
-    new Patch(),
-    new Delete()
 ],
     normalizationContext: ['groups' => ['read:sportshall:item']],
     denormalizationContext: ['groups' => ['write:sportshall:item']]
@@ -49,6 +46,8 @@ class SportsHall {
     #[Groups(['read:sportshall:item', 'write:sportshall:item'])]
     public string $city;
 
+    #[Groups(['read:sportshall:item'])]
+    #[ApiProperty(readableLink: true)]
     #[ORM\OneToMany(mappedBy: 'sportsHall', targetEntity: User::class)]
     private Collection $subscribers;
 

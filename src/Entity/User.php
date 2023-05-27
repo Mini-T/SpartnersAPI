@@ -58,17 +58,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ApiProperty(writableLink: false, security: true)]
     private ?string $password = null;
 
-    #[Groups(['write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
     #[Name]
+    #[ApiProperty(readableLink: true, readable: true)]
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
 
-    #[Groups(['write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
     #[Name]
     #[ORM\Column(length: 255)]
     private ?string $lastname = null;
 
-    #[Groups([ 'write:user:item', 'read:user:collection'])]
+    #[Groups([ 'write:user:item', 'read:sportshall:item', 'read:user:collection'])]
     #[Sex]
     #[ORM\Column(length: 255)]
     private ?string $sex = null;
@@ -78,22 +79,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[Groups([ 'write:user:item'])]
+    #[Groups(['write:user:item', 'read:sportshall:item'])]
     #[Birthdate]
     #[ORM\Column]
     private string $birthDate;
 
-    #[Groups([ 'write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
     #[Level]
     #[ORM\Column(length: 255)]
     private ?string $level = null;
 
-    #[Groups(['write:user:item'])]
+    #[Groups(['write:user:item', 'read:sportshall:item'])]
     #[Objective]
     #[ORM\Column(length: 255)]
     private ?string $objective = null;
 
-    #[Groups(['write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = '';
 
@@ -112,7 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class, orphanRemoval: true)]
     private ?Collection $messages;
 
-    #[Groups([ 'write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection'])]
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     private ?SportsHall $sportsHall = null;
 
