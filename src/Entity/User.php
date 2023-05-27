@@ -4,13 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
-use App\Controller\UserController;
 use App\Repository\UserRepository;
 use App\State\UserProcessor;
 use App\Validators\Constraint\Birthdate;
@@ -18,6 +13,7 @@ use App\Validators\Constraint\Level;
 use App\Validators\Constraint\Name;
 use App\Validators\Constraint\Objective;
 use App\Validators\Constraint\Sex;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -25,7 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Email;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -79,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[Groups(['write:user:item', 'read:sportshall:item'])]
+    #[Groups(['write:user:item'])]
     #[Birthdate]
     #[ORM\Column]
     private string $birthDate;
@@ -432,5 +427,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+
+    #[Groups(['read:user:collection', 'read:sportshall:item'])]
+    public function getAge(): int {
+        $birthdate = DateTime::createFromFormat("Y-m-d", $this->birthDate);
+        $currentDate = new DateTime();
+        $age = $currentDate->diff($birthdate)->y;
+
+        return $age;
     }
 }

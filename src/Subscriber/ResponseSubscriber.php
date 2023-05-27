@@ -41,6 +41,5 @@ class ResponseSubscriber implements EventSubscriberInterface
         if ($req->getRequestUri() === '/api/users' && $req->isMethod('POST') && $event->getResponse()->getStatusCode() === 201) {
             $event->setResponse(new JsonResponse(['message' => 'Successfully created user']));
         }
-
     }
 }
