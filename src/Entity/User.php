@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Email]
-    #[Groups(['write:user:item', 'read:chat:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:chat:item', 'read:user:collection', 'read:sportshall:item'])]
     private ?string $email = null;
 
 
@@ -84,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $level = null;
 
-    #[Groups(['write:user:item', 'read:sportshall:item'])]
+    #[Groups(['write:user:item', 'read:sportshall:item', 'read:user:collection'])]
     #[Objective]
     #[ORM\Column(length: 255)]
     private ?string $objective = null;
