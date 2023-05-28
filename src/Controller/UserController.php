@@ -50,6 +50,11 @@ class UserController extends AbstractController
 
         // Récupère les données du formulaire
         $data = json_decode($request->getContent(), true);
+        if (!$data){
+            return $this->json((
+                'No arguments given'
+            ));
+        }
         foreach ($data as $key => $value) {
             switch ($key) {
                 case 'sex':
@@ -85,7 +90,9 @@ class UserController extends AbstractController
                     );
                     return $this->json($responseData, 400);
                 }
-            }
+            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective());
+
+        }
         try {
             $this->entityManager->persist($user);
             $this->entityManager->flush();
@@ -94,7 +101,7 @@ class UserController extends AbstractController
         }
 
         return $this->json([
-            'Success' => 'User was updated Successfully'
+            $userDTO
         ]);
         }
 }
