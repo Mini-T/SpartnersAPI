@@ -9,8 +9,19 @@ class NameValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-        if (!ctype_alpha($value)) {
+        if (!$this->validateName($value)) {
             $this->context->buildViolation($constraint->message)->setParameter('{{ string }}', $value)->addViolation();
         }
     }
+
+    private function validateName($nom) {
+        $pattern = "/^[\p{L}\-' ]+$/u";
+
+        if (preg_match($pattern, $nom)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
