@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\DTO\UserDTO;
 use App\Entity\User;
+use App\Repository\SportsHallRepository;
 use App\State\UserProcessor;
 use DateTime;
 use Doctrine\ORM\EntityManager;
@@ -29,18 +30,21 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Get(security: "is_granted('ROLE_USER')")]
 class UserController extends AbstractController
 {
-    private $entityManager;
-    private $security;
+    private SportsHallRepository $sportsHallRepository;
+    private EntityManagerInterface $entityManager;
+    private Security $security;
 
-    public function __construct(Security $security, EntityManagerInterface $entityManager)
+    public function __construct(Security $security, EntityManagerInterface $entityManager, SportsHallRepository $sportsHallRepository)
     {
+        $this->sportsHallRepository = $sportsHallRepository;
         $this->security = $security;
         $this->entityManager = $entityManager;
     }
     #[Route('/api/me', name: 'app_me', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse {
         $userObj = $this->security->getUser();
-        $userDto = new UserDTO($userObj->getFirstname(), $userObj->getLastname(),$userObj->getEmail(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $userObj->getAge(), $userObj->getJoinDate(), $userObj->getLatitude(), $userObj->getLongitude());
+        $sportsHall = $userObj->getSportsHall()->getId();
+        $userDto = new UserDTO($userObj->getFirstname(), $userObj->getLastname(),$userObj->getEmail(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $userObj->getAge(), $userObj->getJoinDate(), $userObj->getLatitude(), $userObj->getLongitude(), $sportsHall);
         return $this->json($userDto);
     }
 
@@ -85,14 +89,18 @@ class UserController extends AbstractController
                 case 'longitude':
                     $user->setLongitude($value);
                     break;
+                case 'sportsHall':
+                    $sportsHall = $this->sportsHallRepository->find($value);
+                    $user->setSportsHall($sportsHall);
+                    break;
                 default:
                     $responseData = array(
                         "message" => "Invalid Arguments"
                     );
                     return $this->json($responseData, 400);
                 }
-            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective(), $user->getAge(), $user->getJoinDate(), $user->getLatitude(), $user->getLongitude());
-
+                $sportsHallId = $user->getSportsHall()->getId();
+            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective(), $user->getAge(), $user->getJoinDate(), $user->getLatitude(), $user->getLongitude(), $sportsHallId);
         }
         try {
             $this->entityManager->persist($user);
