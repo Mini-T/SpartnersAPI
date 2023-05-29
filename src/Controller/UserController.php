@@ -43,6 +43,9 @@ class UserController extends AbstractController
     #[Route('/api/me', name: 'app_me', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse {
         $userObj = $this->security->getUser();
+        if(!$userObj) {
+            return new JsonResponse('Authenticate first', 401);
+        }
         $sportsHall = $userObj->getSportsHall()->getId();
         $userDto = new UserDTO($userObj->getFirstname(), $userObj->getLastname(),$userObj->getEmail(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $userObj->getAge(), $userObj->getJoinDate(), $userObj->getLatitude(), $userObj->getLongitude(), $sportsHall);
         return $this->json($userDto);
@@ -52,7 +55,9 @@ class UserController extends AbstractController
     public function patchCurrentUser(Request $request)
     {
         $user = $this->security->getUser();
-
+        if(!$user) {
+            return new JsonResponse('Authenticate first', 401);
+        }
         // Récupère les données du formulaire
         $data = json_decode($request->getContent(), true);
         if (!$data){
