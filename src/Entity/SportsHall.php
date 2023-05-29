@@ -27,6 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SportsHall {
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
+    #[Groups('read:sportshall:item')]
     private ?int $id = null;
 
     #[ORM\Column]
