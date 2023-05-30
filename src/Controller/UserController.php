@@ -47,7 +47,7 @@ class UserController extends AbstractController
             return new JsonResponse('Authenticate first', 401);
         }
         $sportsHall = $userObj->getSportsHall()->getId();
-        $userDto = new UserDTO($userObj->getFirstname(), $userObj->getLastname(),$userObj->getEmail(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $userObj->getAge(), $userObj->getJoinDate(), $userObj->getLatitude(), $userObj->getLongitude(), $sportsHall);
+        $userDto = new UserDTO($userObj->getFirstname(), $userObj->getLastname(),$userObj->getEmail(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $userObj->getAge(), $userObj->getJoinDate(), $userObj->getLatitude(), $userObj->getLongitude(), $sportsHall, $userObj->isVisible());
         return $this->json($userDto);
     }
 
@@ -98,6 +98,9 @@ class UserController extends AbstractController
                     $sportsHall = $this->sportsHallRepository->find($value);
                     $user->setSportsHall($sportsHall);
                     break;
+                case 'visible':
+                    $user->setVisible($value);
+                    break;
                 default:
                     $responseData = array(
                         "message" => "Invalid Arguments"
@@ -105,7 +108,7 @@ class UserController extends AbstractController
                     return $this->json($responseData, 400);
                 }
                 $sportsHallId = $user->getSportsHall()->getId();
-            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective(), $user->getAge(), $user->getJoinDate(), $user->getLatitude(), $user->getLongitude(), $sportsHallId);
+            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective(), $user->getAge(), $user->getJoinDate(), $user->getLatitude(), $user->getLongitude(), $sportsHallId, $user->isVisible());
         }
         try {
             $this->entityManager->persist($user);

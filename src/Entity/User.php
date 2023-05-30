@@ -97,11 +97,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $premium = false;
 
-    #[Groups(['write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
-    #[Groups(['write:user:item', 'read:user:collection'])]
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
@@ -112,6 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'subscribers')]
     private ?SportsHall $sportsHall = null;
 
+
     #[ORM\ManyToMany(targetEntity: Chat::class, mappedBy: 'users')]
     private Collection $inChats;
 
@@ -121,6 +122,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read:user:collection', 'read:sportshall:item'])]
     #[ORM\Column(nullable: false)]
     private String $joinDate;
+
+    #[Groups(['write:user:item', 'read:user:collection', 'read:sportshall:item'])]
+    #[ORM\Column]
+    private bool $visible = false;
 
     public function __construct()
     {
@@ -449,5 +454,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
     public function getJoinDate(): string {
         return $this->joinDate;
+    }
+
+    public function isVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): self
+    {
+        $this->visible = $visible;
+
+        return $this;
     }
 }

@@ -17,8 +17,9 @@ class UserDTO
     public ?int $sportsHall;
     public int $age;
     public string $joinDate;
+    public bool $visible;
 
-    public function __construct(string $firstname, string $lastname, string $email, string $sex, string $city, ?string $description, string $level, string $objective, int $age, string $joinDate, ?float $latitude, ?float $longitude, ?int $sportsHall)
+    public function __construct(string $firstname, string $lastname, string $email, string $sex, string $city, ?string $description, string $level, string $objective, int $age, string $joinDate, ?float $latitude, ?float $longitude, ?int $sportsHall, bool $visible)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -33,5 +34,6 @@ class UserDTO
         $this->latitude = $latitude;
         $this->longitude = $longitude;
         $this->sportsHall = $sportsHall;
+        $this->visible = $visible;
     }
 }
