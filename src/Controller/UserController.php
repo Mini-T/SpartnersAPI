@@ -40,10 +40,7 @@ class UserController extends AbstractController
     #[Route('/api/me', name: 'app_me', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse {
         $userObj = $this->security->getUser();
-        $birthdate = DateTime::createFromFormat("Y-m-d", $userObj->getBirthDate());
-        $currentDate = new DateTime();
-        $age = $currentDate->diff($birthdate)->y;
-        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $age, $userObj->getJoinDate());
+        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $userObj->getAge(), $userObj->getJoinDate());
         return $this->json($userDto);
     }
 
@@ -94,7 +91,7 @@ class UserController extends AbstractController
                     );
                     return $this->json($responseData, 400);
                 }
-            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective());
+            $userDTO = new UserDTO($user->getFirstname(), $user->getLastname(), $user->getEmail(), $user->getSex(), $user->getCity(), $user->getDescription(), $user->getLevel(), $user->getObjective(), $user->getAge(), $user->getJoinDate());
 
         }
         try {
