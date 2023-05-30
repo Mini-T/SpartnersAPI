@@ -118,6 +118,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'admin', targetEntity: Chat::class, orphanRemoval: true)]
     private Collection $ownedChats;
 
+    #[Groups('read:user:collection')]
+    #[ORM\Column(nullable: false)]
+    private String $joinDate;
+
+    #[Groups(['read:user:collection', 'read:sportshall:item'])]
+    #[ORM\Column(nullable: false)]
+    private int $age;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -429,13 +437,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-    #[Groups(['read:user:collection', 'read:sportshall:item'])]
     public function getAge(): int {
-        $birthdate = DateTime::createFromFormat("Y-m-d", $this->birthDate);
-        $currentDate = new DateTime();
-        $age = $currentDate->diff($birthdate)->y;
+        return $this->age;
+    }
 
-        return $age;
+    public function setAge(int $age): self {
+        $this->age = $age;
+        return $this;
+    }
+
+    public function setJoinDate(string $joinDate): self {
+        $this->joinDate = $joinDate;
+        return $this;
+    }
+    public function getJoinDate(): string {
+        return $this->joinDate;
     }
 }
