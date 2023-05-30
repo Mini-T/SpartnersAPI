@@ -118,7 +118,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'admin', targetEntity: Chat::class, orphanRemoval: true)]
     private Collection $ownedChats;
 
-    #[Groups('read:user:collection')]
+    #[Groups(['read:user:collection', 'read:sportshall:item'])]
     #[ORM\Column(nullable: false)]
     private String $joinDate;
 
