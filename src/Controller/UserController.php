@@ -10,6 +10,7 @@ use App\DTO\UserDTO;
 use App\Entity\User;
 use App\Repository\SportsHallRepository;
 use App\State\UserProcessor;
+use App\Validators\ObjectiveValidator;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -73,12 +74,6 @@ class UserController extends AbstractController
                 case 'city':
                     $user->setCity($value);
                     break;
-                case 'firstname':
-                    $user->setFirstname($value);
-                    break;
-                case 'lastname':
-                    $user->setLastname($value);
-                    break;
                 case 'level':
                     $user->setLevel($value);
                     break;
@@ -95,7 +90,11 @@ class UserController extends AbstractController
                     $user->setLongitude($value);
                     break;
                 case 'sportsHall':
+
                     $sportsHall = $this->sportsHallRepository->find($value);
+                    if ($sportsHall == null) {
+                        return $this->json('Invalid Arguments', 400);
+                    }
                     $user->setSportsHall($sportsHall);
                     break;
                 case 'visible':

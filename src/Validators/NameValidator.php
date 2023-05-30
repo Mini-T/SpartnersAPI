@@ -14,7 +14,7 @@ class NameValidator extends ConstraintValidator
         }
     }
 
-    private function validateName($nom) {
+    public function validateName($nom) {
         $pattern = "/^[\p{L}\-' ]+$/u";
 
         if (preg_match($pattern, $nom)) {
