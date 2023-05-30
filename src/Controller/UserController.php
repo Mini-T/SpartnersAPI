@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Post;
 use App\DTO\UserDTO;
 use App\Entity\User;
 use App\State\UserProcessor;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Exception\InvalidArgumentException;
@@ -39,7 +40,10 @@ class UserController extends AbstractController
     #[Route('/api/me', name: 'app_me', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse {
         $userObj = $this->security->getUser();
-        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective());
+        $birthdate = DateTime::createFromFormat("Y-m-d", $userObj->getBirthDate());
+        $currentDate = new DateTime();
+        $age = $currentDate->diff($birthdate)->y;
+        $userDto = new UserDTO($userObj->getFirstname(),$userObj->getEmail(), $userObj->getLastname(), $userObj->getSex(), $userObj->getCity(), $userObj->getDescription(), $userObj->getLevel() ,$userObj->getObjective(), $age, $userObj->getJoinDate());
         return $this->json($userDto);
     }
 

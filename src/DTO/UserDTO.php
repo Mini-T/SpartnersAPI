@@ -12,8 +12,10 @@ class UserDTO
     public string $level;
     public string $objective;
     public ?string $description;
+    public int $age;
+    public string $joinDate;
 
-    public function __construct(string $firstname, string $lastname, string $email, string $sex, string $city, ?string $description, string $level, string $objective)
+    public function __construct(string $firstname, string $lastname, string $email, string $sex, string $city, ?string $description, string $level, string $objective, int $age, string $joinDate)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -23,5 +25,7 @@ class UserDTO
         $this->level = $level;
         $this->objective = $objective;
         $this->description = $description;
+        $this->age = $age;
+        $this->joinDate = $joinDate;
     }
 }
