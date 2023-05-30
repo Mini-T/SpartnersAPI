@@ -29,8 +29,6 @@ class UserProcessor implements ProcessorInterface
         $now = new DateTime();
         $actualDateString = date_format($now, 'Y-m-d');
         $data->setJoinDate($actualDateString);
-        $birthdate = DateTime::createFromFormat("Y-m-d", $data->getBirthDate());
-        $data->setAge($now->diff($birthdate)->y);
 
         return $this->processor->process($data, $operation, $uriVariables, $context);
     }

@@ -122,10 +122,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: false)]
     private String $joinDate;
 
-    #[Groups(['read:user:collection', 'read:sportshall:item'])]
-    #[ORM\Column(nullable: false)]
-    private int $age;
-
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -437,13 +433,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAge(): int {
-        return $this->age;
-    }
 
-    public function setAge(int $age): self {
-        $this->age = $age;
-        return $this;
+    #[Groups(['read:user:collection', 'read:sportshall:item'])]
+    public function getAge(): int {
+        $birthdate = DateTime::createFromFormat("Y-m-d", $this->birthDate);
+        $currentDate = new DateTime();
+        $age = $currentDate->diff($birthdate)->y;
+
+        return $age;
     }
 
     public function setJoinDate(string $joinDate): self {
